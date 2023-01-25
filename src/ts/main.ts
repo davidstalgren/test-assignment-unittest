@@ -1,6 +1,10 @@
 import { addTodo, changeTodo, removeAllTodos } from "./functions";
 import { Todo } from "./models/Todo";
 
+export function sendMessage(theMessage: string) {
+  return theMessage;
+}
+
 let todos: Todo[] = JSON.parse(localStorage.getItem("todos") || "[]");
 
 document.getElementById("clearTodos")?.addEventListener("click", () => {
