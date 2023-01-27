@@ -21,13 +21,13 @@ document.getElementById("clearTodos")?.addEventListener("click", () => {
   }
 );
 
-function createNewTodo(todoText: string, todos: Todo[]) {
+export function createNewTodo(todoText: string, todos: Todo[]) {
   let result = addTodo(todoText, todos);
 
   if (result.success) {
-    createHtml(todos);
+    exports.createHtml(todos);
   } else {
-    displayError(result.error, true);
+    exports.displayError(result.error, true);
   }
 }
 
@@ -57,11 +57,13 @@ export function createHtml(todos: Todo[]) {
   }
 }
 
+//Done
 export function toggleTodo(todo: Todo) {
   changeTodo(todo);
   exports.createHtml(todos);
 }
 
+//Done
 export function displayError(error: string, show: boolean) {
   let errorContainer: HTMLDivElement = document.getElementById(
     "error"
@@ -76,6 +78,7 @@ export function displayError(error: string, show: boolean) {
   }
 }
 
+//Done
 export function clearTodos(todos: Todo[]) {
   removeAllTodos(todos);
   exports.createHtml(todos);

@@ -3,53 +3,82 @@
  */
 
 //*****************************************************************************************
-//----------------------------------------- Imports ---------------------------------------
+//------------------------------ Imports and global stuffs---------------------------------
 //*****************************************************************************************
 
 import * as main from '../ts/main';
 import * as functions from '../ts/functions';
+import { Todo } from "../ts/models/Todo";
+
+beforeEach(() => {
+	document.body.innerHTML = '';
+})
 
 //*****************************************************************************************
-//--------------------------------------- clearTodos --------------------------------------
+//------------------------------------- createNewTodo -------------------------------------
 //*****************************************************************************************
 
-
-describe("clearTodos", () => {
-  test("Should call function createHtml properly", () => {
+describe("createNewTodo", () => {
+  test("Should call function createHtml properly if addTodo returns success true", () => {
     //Arrange
+    document.body.innerHTML = `
+    <ul id="todos" class="todo"></ul>
+    `;
+    let todos: Todo[] = [];
     let spyOnCreateHtml = jest.spyOn(main, "createHtml").mockReturnValue();
 
     //Act
-    main.clearTodos ([])
+    main.createNewTodo('text', todos);
 
     //Assert
     expect(spyOnCreateHtml).toHaveBeenCalled();
-    expect(spyOnCreateHtml).toHaveBeenCalledTimes(1);
     spyOnCreateHtml.mockRestore();
-  })
+/*     expect(todos).toBe(todos.length + 1); */
+  });
 
-  test ('should call function removeAllTodos properly', () => {
+  test("Should call function displayError properly if addTodo returns success false", () => {
     //Arrange
-    document.body.innerHTML = `<ul id="todos" class="todo"></ul>`
-    let spyOnRemoveAllTodos = jest.spyOn(functions, "removeAllTodos").mockReturnValue();
+    document.body.innerHTML = `
+    <ul id="todos" class="todo"></ul>
+    `;
+    let todos: Todo[] = [];
+    let spyOnDisplayError = jest.spyOn(main, "displayError").mockReturnValue();
 
     //Act
-    main.clearTodos ([])
+    main.createNewTodo('', todos);
 
     //Assert
-    expect(spyOnRemoveAllTodos).toHaveBeenCalled()
-    expect(spyOnRemoveAllTodos).toHaveBeenCalledTimes(1)
-  })
+    expect(spyOnDisplayError).toHaveBeenCalled();
+    spyOnDisplayError.mockRestore();
+/*     expect(todos).toBe(todos.length + 1); */
+  });
 });
 
 //*****************************************************************************************
-//--------------------------------------- toggleTodo --------------------------------------
+//-------------------------------------- createHtml ---------------------------------------
+//*****************************************************************************************
+
+/* describe("createHtml", () => {
+  test("", () => {
+    //Arrange
+    
+    //Act
+    
+    //Assert
+    
+  })
+}); */
+
+//*****************************************************************************************
+//-------------------------------------- toggleTodo ---------------------------------------
 //*****************************************************************************************
 
 describe("toggleTodo", () => {
   test("Should call function changeTodo properly", () => {
     //Arrange
-    document.body.innerHTML = `<ul id="todos" class="todo"></ul>`
+    document.body.innerHTML = `
+      <ul id="todos" class="todo"></ul>
+      `;
     let spyOnChangeTodo = jest.spyOn(functions, "changeTodo").mockReturnValue();
     let Todo = {text: 'aTodo', done: false}
 
@@ -58,11 +87,11 @@ describe("toggleTodo", () => {
 
     //Assert
     expect(spyOnChangeTodo).toHaveBeenCalled();
+    spyOnChangeTodo.mockRestore();
   })
 
-  test ('should call function createHtml properly', () => {
+  test ('Should call function createHtml properly', () => {
     //Arrange
-    document.body.innerHTML = `<ul id="todos" class="todo"></ul>`
     let spyOnCreateHtml = jest.spyOn(main, "createHtml").mockReturnValue();
     let Todo = {text: 'aTodo', done: false}
 
@@ -79,3 +108,76 @@ describe("toggleTodo", () => {
 //*****************************************************************************************
 //------------------------------------- displayError --------------------------------------
 //*****************************************************************************************
+
+describe("displayError", () => {
+  test("Should add class show is show is true", () => {
+    //Arrange
+    document.body.innerHTML = `
+      <div id="error" class="error"></div>
+      `;
+      let errorContainer: HTMLDivElement = document.getElementById("error") as HTMLDivElement;
+
+    //Act
+    main.displayError('error text', true)
+
+    //Assert
+    expect(errorContainer.classList.contains('show')).toBe(true);
+    
+    // Try later with .toHaveClass using other library
+    // https://github.com/testing-library/jest-dom
+
+  })
+
+  test("Should remove class show if show is false", () => {
+    //Arrange
+    document.body.innerHTML = `
+      <div id="error" class="error show"></div>
+      `;
+      let errorContainer: HTMLDivElement = document.getElementById("error") as HTMLDivElement;
+
+    //Act
+    main.displayError('error text', false)
+
+    //Assert
+    expect(errorContainer.classList.contains('show')).toBe(false);
+
+    // Try later with .toHaveClass using other library
+    // https://github.com/testing-library/jest-dom
+
+  })
+});
+
+//*****************************************************************************************
+//--------------------------------------- clearTodos --------------------------------------
+//*****************************************************************************************
+
+describe("clearTodos", () => {
+  test("Should call function createHtml properly", () => {
+    //Arrange
+    let spyOnCreateHtml = jest.spyOn(main, "createHtml").mockReturnValue();
+
+    //Act
+    main.clearTodos ([])
+
+    //Assert
+    expect(spyOnCreateHtml).toHaveBeenCalled();
+    expect(spyOnCreateHtml).toHaveBeenCalledTimes(1);
+    spyOnCreateHtml.mockRestore();
+  })
+
+  test ('Should call function removeAllTodos properly', () => {
+    //Arrange
+    document.body.innerHTML = `
+      <ul id="todos" class="todo"></ul>
+      `;
+    let spyOnRemoveAllTodos = jest.spyOn(functions, "removeAllTodos").mockReturnValue();
+
+    //Act
+    main.clearTodos ([])
+
+    //Assert
+    expect(spyOnRemoveAllTodos).toHaveBeenCalled()
+    expect(spyOnRemoveAllTodos).toHaveBeenCalledTimes(1)
+    spyOnRemoveAllTodos.mockRestore();
+  })
+});
