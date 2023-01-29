@@ -21,6 +21,7 @@ document.getElementById("clearTodos")?.addEventListener("click", () => {
   }
 );
 
+//Done
 export function createNewTodo(todoText: string, todos: Todo[]) {
   let result = addTodo(todoText, todos);
 
@@ -50,7 +51,7 @@ export function createHtml(todos: Todo[]) {
     li.classList.add("todo__text");
     li.innerHTML = todos[i].text;
     li.addEventListener("click", () => {
-      toggleTodo(todos[i]);
+      exports.toggleTodo(todos[i]);
     });
 
     todosContainer.appendChild(li);
