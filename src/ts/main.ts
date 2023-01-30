@@ -1,4 +1,4 @@
-import { addTodo, changeTodo, removeAllTodos } from "./functions";
+import { addTodo, changeTodo, completeLast, removeAllTodos } from "./functions";
 import { Todo } from "./models/Todo";
 
 let todos: Todo[] = JSON.parse(localStorage.getItem("todos") || "[]");
@@ -31,7 +31,7 @@ export function createNewTodo(todoText: string, todos: Todo[]) {
     exports.displayError(result.error, true);
   }
 }
-
+//Done
 export function createHtml(todos: Todo[]) {
   localStorage.setItem("todos", JSON.stringify(todos));
 
@@ -55,6 +55,7 @@ export function createHtml(todos: Todo[]) {
     });
 
     todosContainer.appendChild(li);
+    completeLast(todos)
   }
 }
 
